@@ -1,0 +1,68 @@
+.card {
+  width: 100%;
+  margin: 0.5rem 0;
+  align-self: start;
+  overflow: hidden;
+  word-break: break-word;
+  @extend .shadow-1;
+
+  .card-header {
+    font-size: 1.5rem;
+    padding: 1.5rem 1.5rem 0;
+  }
+
+  .card-content {
+    padding: 1rem 1.5rem;
+
+    .card-header {
+      padding: 1rem 0;
+    }
+  }
+  .card-footer {
+    padding: 0.5rem 1.5rem 1rem;
+    border-top: 2px solid rgba(180, 180, 180, 0.2);
+  }
+
+  .card-image {
+    position: relative;
+
+    img {
+      background-size: cover;
+      width: 100%;
+      display: block;
+    }
+  }
+
+  // CARD USER
+
+  &.card-profile {
+    //display: flex;
+
+    .profile-side {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .profile-name {
+        text-align: center;
+        font-size: 1.5rem;
+      }
+
+      .logo {
+        margin: 1rem 0;
+        width: 4rem;
+        height: 4rem;
+        align-self: center;
+        justify-self: center;
+      }
+    }
+
+    .description-side {
+      padding: 1rem;
+
+      .profile-title {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}

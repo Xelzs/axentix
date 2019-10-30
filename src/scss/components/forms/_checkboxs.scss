@@ -1,0 +1,27 @@
+// Default checkbox
+.form-check {
+  cursor: pointer;
+
+  input {
+    margin-right: 0.25rem;
+    cursor: pointer;
+  }
+}
+
+.form-field .form-check {
+  font-weight: initial;
+  margin-bottom: 0;
+}
+
+/// Custom styles
+// Axentix
+.form-check.axentix-style {
+  position: relative;
+  padding-left: 1.7rem;
+
+  [type='checkbox'] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+}

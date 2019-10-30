@@ -1,0 +1,66 @@
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 50vw;
+  transition-timing-function: ease-in-out;
+
+  @include responsive('sm-down') {
+    width: 80vw;
+  }
+
+  .modal-header {
+    padding: 1rem;
+    font-size: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  }
+
+  .modal-content {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  }
+
+  .modal-footer {
+    padding: 1rem;
+  }
+
+  &.from-top {
+    top: -20%;
+    transition-property: top, opacity;
+    opacity: 0;
+
+    &.active {
+      top: 50px; // js
+      opacity: 1;
+    }
+  }
+
+  &.showing {
+    transition-property: transform, opacity;
+    transform: scaleX(0) scaleY(0);
+    opacity: 0;
+
+    &.active {
+      transform: scaleX(1) scaleY(1);
+      opacity: 1;
+    }
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 100%;
+  z-index: 800;
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color ease;
+
+  &.active {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+}
