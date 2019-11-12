@@ -6,6 +6,8 @@ steps:
   image: plugins/webhook
   settings:
     urls: https://dev.useaxentix.com/api/hook
+    headers:
+      from_secret: hook_headers
     template: |
       {
         "version": "{{ build.tag }}"
