@@ -2,7 +2,6 @@
  * Class Modal
  * @class
  */
-
 class Modal {
   /**
    * Construct Modal instance
@@ -20,13 +19,8 @@ class Modal {
     this.el.Modal = this;
     this.modalTriggers = document.querySelectorAll('.modal-trigger');
     this.isActive = this.el.classList.contains('active') ? true : false;
+    this.isAnimated = false;
 
-    /**
-     * Options
-     * @member Modal#options
-     * @property {boolean} overlay Toggle overlay when the modal is active
-     * @property {integer} animationDelay Delay to show modal
-     */
     this.options = extend(this.defaultOptions, options);
 
     if (this.options.overlay) {
@@ -40,7 +34,6 @@ class Modal {
   /**
    * Setup listeners
    */
-
   _setup() {
     this.modalTriggers.forEach(trigger => {
       if (trigger.dataset.target === this.el.id) {
@@ -53,6 +46,9 @@ class Modal {
     this.el.style.transitionDuration = this.options.animationDelay + 'ms';
   }
 
+  /**
+   * Create overlay element
+   */
   _createOverlay() {
     this.overlayElement = document.createElement('div');
     this.overlayElement.classList.add('modal-overlay');
@@ -61,11 +57,25 @@ class Modal {
   }
 
   /**
+   * Set Z-Index when modal is open
+   */
+  _setZIndex() {
+    const totalModals = document.querySelectorAll('.modal.active').length + 1;
+
+    this.overlayElement.style.zIndex = 800 + totalModals * 6;
+    this.el.style.zIndex = 800 + totalModals * 10;
+  }
+
+  /**
    * Handle click on trigger
    */
   _onClickTrigger(e, id) {
     e.preventDefault();
     const modal = document.querySelector('#' + id).Modal;
+
+    if (modal.isAnimated) {
+      return;
+    }
 
     if (modal.isActive) {
       modal.close();
@@ -78,24 +88,30 @@ class Modal {
   /**
    * Open the modal
    */
-
   open() {
+    this.isAnimated = true;
+    this._setZIndex();
     this.el.style.display = 'block';
     this.overlay(true);
     setTimeout(() => {
       this.el.classList.add('active');
-    }, 1);
+    }, 50);
+
+    setTimeout(() => {
+      this.isAnimated = false;
+    }, this.options.animationDelay);
   }
 
   /**
    * Close the modal
    */
-
   close() {
+    this.isAnimated = true;
     this.el.classList.remove('active');
     this.overlay(false);
     setTimeout(() => {
       this.el.style.display = '';
+      this.isAnimated = false;
     }, this.options.animationDelay);
   }
 
@@ -109,7 +125,7 @@ class Modal {
         document.body.appendChild(this.overlayElement);
         setTimeout(() => {
           this.overlayElement.classList.add('active');
-        }, 1);
+        }, 50);
       } else {
         this.overlayElement.classList.remove('active');
         setTimeout(() => {
