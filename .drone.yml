@@ -8,7 +8,7 @@ steps:
   settings:
     urls: https://dev.useaxentix.com/api/hook
     content_type: application/json
-    headers: "${HOOK_HEADERS}"
+    headers: ${HOOK_HEADERS}
     template: |
       {
         "version": "{{ build.tag }}",
