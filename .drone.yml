@@ -7,8 +7,10 @@ steps:
   settings:
     urls: https://dev.useaxentix.com/api/hook
     content_type: application/json
-    headers:
-      from_secret: hook_headers
+    environment:
+      HOOK_HEADERS:
+        from_secret: hook_headers
+    headers: ${HOOK_HEADERS}
     template: |
       {
         "version": "{{ build.tag }}",
