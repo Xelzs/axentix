@@ -4,11 +4,11 @@ name: axentix new release
 steps:
 - name: send
   image: plugins/webhook
-  secrets: [ hook_headers ]
   settings:
     urls: https://dev.useaxentix.com/api/hook
     content_type: application/json
-    headers: ${HOOK_HEADERS}
+    headers:
+      from_secret: hook_headers
     template: |
       {
         "version": "{{ build.tag }}",
@@ -17,3 +17,4 @@ steps:
   when:
     event:
       - tag
+      
