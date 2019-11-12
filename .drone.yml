@@ -12,8 +12,6 @@ steps:
       {
         "version": "{{ build.tag }}"
       }
-    debug: true
   when:
     event:
       - tag
-      
