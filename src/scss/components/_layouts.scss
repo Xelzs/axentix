@@ -32,6 +32,14 @@
   grid-template-columns: auto 1fr;
   grid-auto-rows: auto 1fr auto;
 
+  &.sidenav-right {
+    grid-template-areas:
+      'header header'
+      'main sidenav'
+      'footer footer';
+    grid-template-columns: 1fr auto;
+  }
+
   @include responsive('sm-down') {
     grid-template-areas:
       'header'
@@ -41,15 +49,15 @@
     grid-auto-rows: auto 1fr auto;
   }
 
-  .sidenav {
+  .sidenav.fixed {
     position: fixed;
-    z-index: 900;
+    z-index: $layouts-sidenav-fixed-zindex;
     grid-area: initial;
 
     @include responsive('md-up') {
       grid-area: sidenav;
       position: initial;
-      z-index: initial;
+      z-index: $layouts-sidenav-fixed-zindex-mdup;
     }
   }
 
@@ -67,15 +75,35 @@
         padding-left: $sidenav-width;
       }
 
-      .navbar-fixed .navbar,
+      .navbar-fixed .navbar {
+        margin-left: $sidenav-width;
+      }
+
       footer {
         padding-left: $sidenav-width + 0.5rem;
       }
+
+      &.sidenav-right {
+        header,
+        main {
+          padding-right: $sidenav-width;
+          padding-left: 0;
+        }
+
+        .navbar-fixed .navbar {
+          margin-right: $sidenav-width;
+          margin-left: 0;
+        }
+
+        footer {
+          padding-right: $sidenav-width + 0.5rem;
+          padding-left: 0.5rem;
+        }
+      }
     }
 
-    .sidenav {
+    .sidenav.fixed {
       position: fixed;
-      z-index: 900;
       grid-area: initial;
     }
 
@@ -85,27 +113,62 @@
       }
 
       .navbar-fixed .navbar {
-        padding-left: 0.5rem;
+        margin-left: 0;
+      }
+
+      &.sidenav-right {
+        header {
+          padding-right: initial;
+        }
+
+        .navbar-fixed .navbar {
+          margin-right: 0;
+        }
       }
 
       @include responsive('md-up') {
-        .sidenav {
+        .sidenav.fixed {
           top: 3.5rem;
         }
       }
     }
-  }
 
-  &.sidenav-large {
-    @include responsive('md-up') {
-      header,
-      main {
-        padding-left: $sidenav-large-width;
-      }
+    &.sidenav-large {
+      @include responsive('md-up') {
+        header,
+        main {
+          padding-left: $sidenav-large-width;
+        }
 
-      .navbar-fixed .navbar,
-      footer {
-        padding-left: $sidenav-large-width + 0.5rem;
+        &:not(.under-navbar) {
+          .navbar-fixed .navbar {
+            margin-left: $sidenav-large-width;
+          }
+        }
+
+        footer {
+          padding-left: $sidenav-large-width + 0.5rem;
+        }
+
+        &.sidenav-right {
+          header,
+          main {
+            padding-right: $sidenav-large-width;
+            padding-left: 0;
+          }
+
+          &:not(.under-navbar) {
+            .navbar-fixed .navbar {
+              margin-right: $sidenav-large-width;
+              margin-left: 0;
+            }
+          }
+
+          footer {
+            padding-right: $sidenav-large-width + 0.5rem;
+            padding-left: 0.5rem;
+          }
+        }
       }
     }
   }

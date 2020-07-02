@@ -1,13 +1,17 @@
-/*** Table ***/
+.card .table thead {
+  word-break: normal;
+}
+
 .table {
   display: table;
   width: 100%;
   border-collapse: collapse;
+  border: none;
 
   &.bordered {
     td,
     th {
-      border: 1px solid rgba(0, 0, 0, 0.3);
+      border: 1px solid rgb(210, 210, 210);
     }
 
     tr {
@@ -22,8 +26,10 @@
     }
   }
 
-  &.border-0 {
-    tr {
+  &.border-0,
+  &.striped {
+    td,
+    th {
       border: none;
     }
   }
@@ -56,17 +62,12 @@
     color: #797676;
   }
 
-  &,
-  td,
-  th {
-    border: none;
-  }
-
   td,
   th {
     text-align: left;
     padding: 0.8rem 0.5rem;
     vertical-align: middle;
+    border-bottom: 1px solid rgb(210, 210, 210);
   }
 
   thead {
@@ -76,10 +77,6 @@
   th {
     font-weight: 700;
     color: inherit;
-  }
-
-  tr {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   }
 }
 

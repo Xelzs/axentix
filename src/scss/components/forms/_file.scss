@@ -1,0 +1,18 @@
+.form-file {
+  position: relative;
+  display: flex;
+
+  .btn {
+    align-self: center;
+  }
+
+  .form-field {
+    width: unset;
+    flex-grow: 1;
+  }
+
+  input[type='file'] {
+    opacity: 0;
+    cursor: pointer;
+  }
+}

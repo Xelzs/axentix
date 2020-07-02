@@ -1,17 +1,8 @@
 /**
- * Component: Sidenav
- */
-
-let defaultOptions = {
-  overlay: true,
-  bodyScrolling: true
-};
-
-/**
  * Class Sidenav
  * @class
  */
-class Sidenav {
+class Sidenav extends AxentixComponent {
   /**
    * Construct Sidenav instance
    * @constructor
@@ -19,39 +10,80 @@ class Sidenav {
    * @param {Object} options
    */
   constructor(element, options) {
+    super();
+    this.defaultOptions = {
+      overlay: true,
+      bodyScrolling: false,
+      animationDelay: 300
+    };
+
     this.el = document.querySelector(element);
-    this.el.Sidenav = this;
+
+    this.options = Axentix.extend(this.defaultOptions, options);
+    this._setup();
+  }
+
+  /**
+   * Setup component
+   */
+  _setup() {
+    Axentix.createEvent(this.el, 'sidenav.setup');
     this.sidenavTriggers = document.querySelectorAll('.sidenav-trigger');
     this.isActive = false;
     this.isFixed = this.el.classList.contains('fixed');
     this.isLarge = this.el.classList.contains('large');
 
-    /**
-     * Options
-     * @member Sidenav#options
-     * @property {boolean} overlay Toggle overlay when sidenav is active
-     * @property {boolean} bodyScrolling Prevent bodyScrolling when sidenav is active and over content
-     */
-    this.options = extend(defaultOptions, options);
+    this._setupListeners();
 
-    if (this.options.overlay) {
-      this._createOverlay();
-    }
-    this._setup();
-    this.el.classList.contains('large') ? document.body.classList.add('sidenav-large') : '';
+    this.options.overlay ? this._createOverlay() : '';
+
+    this.el.classList.contains('large')
+      ? document.body.classList.add('sidenav-large')
+      : document.body.classList.remove('sidenav-large');
+
+    this._handleRightSidenav();
+    this.el.style.transitionDuration = this.options.animationDelay + 'ms';
   }
 
   /**
    * Setup listeners
    */
-  _setup() {
+  _setupListeners() {
+    this.listenerRef = this._onClickTrigger.bind(this);
     this.sidenavTriggers.forEach(trigger => {
       if (trigger.dataset.target === this.el.id) {
-        trigger.addEventListener('click', e => this._onClickTrigger(e, this.el.id));
+        trigger.addEventListener('click', this.listenerRef);
       }
     });
-    if (this.options.overlay) {
-      this.overlayElement.addEventListener('click', this._onClickTrigger);
+    this.windowResizeRef = this.close.bind(this);
+    window.addEventListener('resize', this.windowResizeRef);
+  }
+
+  /**
+   * Remove listeners
+   */
+  _removeListeners() {
+    this.sidenavTriggers.forEach(trigger => {
+      if (trigger.dataset.target === this.el.id) {
+        trigger.removeEventListener('click', this.listenerRef);
+      }
+    });
+    this.listenerRef = undefined;
+    window.removeEventListener('resize', this.windowResizeRef);
+    this.windowResizeRef = undefined;
+  }
+
+  /**
+   * Handle right sidenav detection
+   */
+  _handleRightSidenav() {
+    const sidenavs = document.querySelectorAll('.sidenav');
+    const found = Array.from(sidenavs).some(sidenav => sidenav.classList.contains('right-aligned'));
+
+    if (found && !document.body.classList.contains('sidenav-right')) {
+      document.body.classList.add('sidenav-right');
+    } else if (!found && document.body.classList.contains('sidenav-right')) {
+      document.body.classList.remove('sidenav-right');
     }
   }
 
@@ -66,53 +98,60 @@ class Sidenav {
 
   /**
    * Enable or disable body scroll when option is true
-   * @param {boolean} state Enable or disable body scroll
+   * @param {boolean} state
    */
   _toggleBodyScroll(state) {
-    if (this.options.bodyScrolling) {
-      if (state) {
-        document.body.style.overflow = '';
-      } else {
-        document.body.style.overflow = 'hidden';
-      }
+    if (!this.options.bodyScrolling) {
+      state ? (document.body.style.overflow = '') : (document.body.style.overflow = 'hidden');
     }
   }
 
   /**
    * Handle click on trigger
+   * @param {Event} e
    */
-  _onClickTrigger(e, id) {
+  _onClickTrigger(e) {
     e.preventDefault();
-    const idElem = id ? '#' + id : '#' + document.querySelector('.' + e.target.className).dataset.target;
-    const sidenav = document.querySelector(idElem).Sidenav;
-    if (sidenav.isFixed && window.innerWidth >= 960) {
+    if (this.isFixed && window.innerWidth >= 960) {
       return;
     }
 
-    if (sidenav.isActive) {
-      sidenav.close();
-    } else {
-      sidenav.open();
-    }
-    sidenav.isActive = !sidenav.isActive;
+    this.isActive ? this.close() : this.open();
   }
 
   /**
    * Open sidenav
    */
   open() {
+    if (this.isActive) {
+      return;
+    }
+    Axentix.createEvent(this.el, 'sidenav.open');
+    this.isActive = true;
     this.el.classList.add('active');
     this.overlay(true);
     this._toggleBodyScroll(false);
+
+    setTimeout(() => {
+      Axentix.createEvent(this.el, 'sidenav.opened');
+    }, this.options.animationDelay);
   }
 
   /**
    * Close sidenav
    */
   close() {
+    if (!this.isActive) {
+      return;
+    }
+    Axentix.createEvent(this.el, 'sidenav.close');
     this.el.classList.remove('active');
     this.overlay(false);
-    this._toggleBodyScroll(true);
+    setTimeout(() => {
+      this._toggleBodyScroll(true);
+      this.isActive = false;
+      Axentix.createEvent(this.el, 'sidenav.closed');
+    }, this.options.animationDelay);
   }
 
   /**
@@ -122,10 +161,13 @@ class Sidenav {
   overlay(state) {
     if (this.options.overlay) {
       if (state) {
+        this.overlayElement.addEventListener('click', this.listenerRef);
         document.body.appendChild(this.overlayElement);
       } else {
+        this.overlayElement.removeEventListener('click', this.listenerRef);
         document.body.removeChild(this.overlayElement);
       }
     }
   }
 }
+Axentix.Sidenav = Sidenav;

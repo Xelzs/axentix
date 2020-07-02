@@ -1,4 +1,4 @@
-/*! Axentix Framework | Developed by Axel SIMONET & Vincent LEVEQUE with ♥ */
+/*! Axentix Framework | Developed by Axel SIMONET & Vincent LEVEQUE with ♥ | MIT License */
 
 /*** Imports ***/
 
@@ -10,14 +10,27 @@
 @import './core/base';
 @import './core/colors';
 
-// Grid system
-@import './components/grid';
+// Grix system
+@import './components/grix';
 
 // Components
-@import './components/helpers';
+@import './components/utilities';
 @import './components/navbar';
 @import './components/footer';
 @import './components/layouts';
 @import './components/table';
 @import './components/button';
 @import './components/sidenav';
+@import './components/card';
+@import './components/collapsible';
+@import './components/modal';
+@import './components/toast';
+@import './components/forms/forms';
+@import './components/pagination';
+@import './components/loading/loading';
+@import './components/dropdown';
+@import './components/tab';
+@import './components/fab';
+@import './components/caroulix';
+@import './components/stepper';
+@import './components/tooltip';

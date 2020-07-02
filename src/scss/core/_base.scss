@@ -7,6 +7,8 @@
 
 html {
   font-family: $font-family;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
 }
 
 h1,
@@ -38,31 +40,9 @@ h6 {
 
 a {
   text-decoration: none;
-  color: getColor('primary');
-  transition: color 0.2s ease;
+  color: inherit;
 }
 
 p {
   line-height: 1.6rem;
-}
-
-// Ghost overlay
-.ghost-overlay {
-  position: relative;
-  z-index: 1000;
-  animation: ghost 1s infinite ease-in-out;
-}
-
-@keyframes ghost {
-  0% {
-    background-color: rgba(165, 165, 165, 0.1);
-  }
-
-  50% {
-    background-color: rgba(165, 165, 165, 0.35);
-  }
-
-  100% {
-    background-color: rgba(165, 165, 165, 0.1);
-  }
 }
