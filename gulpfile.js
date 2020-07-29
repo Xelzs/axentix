@@ -6,9 +6,21 @@ const { src, dest, watch, series, parallel } = require('gulp'),
   minify = require('gulp-babel-minify'),
   browserSync = require('browser-sync').create(),
   autoprefixer = require('gulp-autoprefixer'),
+  insert = require('gulp-insert'),
   Fiber = require('fibers');
 
 sass.compiler = require('sass');
+
+function definitionExport() {
+  return src('src/axentix.d.ts').pipe(dest('dist'));
+}
+
+function compileJSESM() {
+  return src('dist/js/axentix.js')
+    .pipe(rename('axentix.esm.js'))
+    .pipe(insert.prepend('export { Axentix };'))
+    .pipe(dest('dist/js/'));
+}
 
 function compileJSMinified() {
   return src('src/js/**/*.js')
@@ -77,6 +89,7 @@ exports.jsmin = compileJSMinified;
 exports.js = compileJS;
 exports.sassmin = compileSassMinified;
 exports.sass = compileSass;
+exports.jsesm = compileJSESM;
 
 exports.watch = function () {
   initBrowserSync();
@@ -94,4 +107,9 @@ exports.watchsass = function () {
   watch('src/scss/**/*.scss', series(compileSassMinified, compileSass));
 };
 
-exports.default = parallel(series(compileJSMinified, compileJS), series(compileSassMinified, compileSass));
+exports.default = parallel(
+  series(parallel(compileJSMinified, compileJS), compileJSESM),
+  compileSassMinified,
+  compileSass,
+  definitionExport
+);

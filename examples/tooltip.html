@@ -18,8 +18,16 @@
     </header>
 
     <main class="container">
-      <div class="grix xs1 md4 mt-5">
-        <div id="tooltip1" class="btn airforce dark-3 mx-auto">Top</div>
+      <p style="height: 40rem;"></p>
+      <div class="grix xs1 md4 my-5">
+        <div
+          id="tooltip1"
+          class="btn airforce dark-3 mx-auto"
+          data-ax="tooltip"
+          data-tooltip-content="Hey guys"
+        >
+          Top
+        </div>
 
         <div id="tooltip2" class="btn airforce dark-3 mx-auto">Right</div>
 
@@ -34,20 +42,28 @@
     </footer>
     <script src="../dist/js/axentix.min.js"></script>
     <script>
-      var tooltipTop = new Tooltip('#tooltip1', 'This is a tooltip', {
-        classes: 'grey dark-4 light-shadow-2 p-2',
-        position: 'top',
-      });
-      var tooltipRight = new Tooltip('#tooltip2', 'This is a tooltip', {
-        classes: 'grey dark-4 light-shadow-2 p-2',
+      // var tooltipTop = new Axentix.Tooltip('#tooltip1', {
+      //   content: 'This is a tooltip',
+      // });
+      var tooltipRight = new Axentix.Tooltip('#tooltip2', {
+        content: 'This is a tooltip',
         position: 'right',
       });
-      var tooltipBottom = new Tooltip('#tooltip3', 'This is a tooltip', {
-        classes: 'grey dark-4 light-shadow-2 p-2',
+      var tooltipBottom = new Axentix.Tooltip('#tooltip3', {
+        content: 'This is a tooltip',
         position: 'bottom',
       });
-      var tooltipLeft = new Tooltip('#tooltip4', 'This is a tooltip', {
-        classes: 'grey dark-4 light-shadow-2 p-2',
+
+      function test() {
+        tooltipBottom.change({
+          content: 'Hello guys',
+          position: 'right',
+          classes: 'red dark-1 shadow-5 p-3 rounded-tl3',
+        });
+      }
+
+      var tooltipLeft = new Axentix.Tooltip('#tooltip4', {
+        content: 'This is a tooltip',
         position: 'left',
       });
     </script>

@@ -3,18 +3,17 @@
 // Definitions by: Axel SIMONET <https://github.com/Xelzs>
 //                 Vincent LEVEQUE <https://github.com/Stallos11>
 
-// https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/bootstrap/index.d.ts
-// https://github.com/foundation/foundation-sites/blob/develop/js/typescript/foundation.d.ts
+export namespace Axentix {
+  class AxentixComponent {
+    sync(): void;
+    reset(): void;
+  }
 
-declare module Axentix {
-  interface Caroulix {
+  class Caroulix extends AxentixComponent {
+    constructor(el: string, options?: CaroulixOptions);
+
     updateHeight(): void;
     goTo(number: number, side: string): void;
-
-    /**
-     * Go to previous {step}
-     * @param step DESC HERE
-     */
     prev(step?: number): void;
     next(step?: number): void;
     play(): void;
@@ -77,7 +76,9 @@ declare module Axentix {
     };
   }
 
-  interface Collapsible {
+  class Collapsible extends AxentixComponent {
+    constructor(el: string, options?: CollapsibleOptions);
+
     open(): void;
     close(): void;
   }
@@ -106,7 +107,9 @@ declare module Axentix {
     };
   }
 
-  interface Dropdown {
+  class Dropdown extends AxentixComponent {
+    constructor(el: string, options?: DropdownOptions);
+
     open(): void;
     close(): void;
   }
@@ -128,7 +131,9 @@ declare module Axentix {
     animationDelay: number;
   }
 
-  interface Fab {
+  class Fab extends AxentixComponent {
+    constructor(el: string, options?: FabOptions);
+
     open(): void;
     close(): void;
   }
@@ -165,7 +170,9 @@ declare module Axentix {
     offsetY: string;
   }
 
-  interface Modal {
+  class Modal extends AxentixComponent {
+    constructor(el: string, options?: ModalOptions);
+
     open(): void;
     close(): void;
     overlay(state: boolean): void;
@@ -188,7 +195,9 @@ declare module Axentix {
     bodyScrolling: boolean;
   }
 
-  interface Sidenav {
+  class Sidenav extends AxentixComponent {
+    constructor(el: string, options?: SidenavOptions);
+
     open(): void;
     close(): void;
     overlay(state: boolean): void;
@@ -211,9 +220,13 @@ declare module Axentix {
     animationDelay: number;
   }
 
-  interface Tab {
+  class Tab extends AxentixComponent {
+    constructor(el: string, options?: TabOptions);
+
     updateActiveElement(): void;
     select(itemId: string): void;
+    prev(step?: number): void;
+    next(step?: number): void;
   }
 
   interface TabOptions {
@@ -228,12 +241,19 @@ declare module Axentix {
     animationDelay: number;
 
     /**
+     * @default false
+     */
+    disableActiveBar: boolean;
+
+    /**
      * @default ''
      */
     caroulix: CaroulixOptions | '';
   }
 
-  interface Toast {
+  class Toast {
+    constructor(content: string, options?: ToastOptions);
+
     show(): void;
     change(content: string, options: ToastOptions): void;
   }
@@ -270,51 +290,90 @@ declare module Axentix {
     mobileDirection: 'top' | 'bottom';
   }
 
-  interface AxentixStatic {
-    // JS Utilities
-    createEvent(element: Element, eventName: string, extraData?: object): void;
-    wrap(target: Array<Element>, wrapper?: Element): Element;
-    extend(defaultObject: object, object: object): object;
+  class Tooltip extends AxentixComponent {
+    constructor(el: string, options?: TooltipOptions);
 
-    // Material forms
-    updateInputs(inputElements?: NodeListOf<Element>): void;
-
-    Caroulix: {
-      new (el: string, options?: CaroulixOptions): Caroulix;
-    };
-
-    Collapsible: {
-      new (el: string, options?: CollapsibleOptions): Collapsible;
-    };
-
-    Dropdown: {
-      new (el: string, options?: DropdownOptions): Dropdown;
-    };
-
-    Fab: {
-      new (el: string, options?: FabOptions): Fab;
-    };
-
-    Modal: {
-      new (el: string, options?: ModalOptions): Modal;
-    };
-
-    Sidenav: {
-      new (el: string, options?: SidenavOptions): Sidenav;
-    };
-
-    Tab: {
-      new (el: string, options?: TabOptions): Tab;
-    };
-
-    Toast: {
-      new (content: string, options?: ToastOptions): Toast;
-    };
+    updatePosition(): void;
+    show(): void;
+    hide(): void;
+    change(options?: TooltipOptions): void;
   }
+
+  interface TooltipOptions {
+    /**
+     * @default ''
+     */
+    content: string;
+
+    /**
+     * @default 0
+     */
+    animationDelay: number;
+
+    /**
+     * @default '10px'
+     */
+    offset: string;
+
+    /**
+     * @default 200
+     */
+    animationDuration: number;
+
+    /**
+     * @default 'grey dark-4 light-shadow-2 p-2'
+     */
+    classes: string;
+
+    /**
+     * @default 'top'
+     */
+    position: string;
+  }
+
+  // JS Utilities
+  function createEvent(element: Element, eventName: string, extraData?: any): void;
+  function wrap(target: Array<Element>, wrapper?: Element): Element;
+  function extend(...args: Array<any>): any;
+  function getComponentOptions(component: string, options: any, el: Element, isLoadedWithData: boolean): any;
+  function isTouchEnabled(): boolean;
+
+  // Material forms
+  function updateInputs(inputElements?: NodeListOf<Element>): void;
+
+  // Core
+  function getInstance(
+    element: string
+  ):
+    | Axentix.Caroulix
+    | Axentix.Collapsible
+    | Axentix.Dropdown
+    | Axentix.Fab
+    | Axentix.Modal
+    | Axentix.Sidenav
+    | Axentix.Tab
+    | Axentix.Toast
+    | Axentix.Tooltip;
+  function getAllInstances(): Array<
+    | Axentix.Caroulix
+    | Axentix.Collapsible
+    | Axentix.Dropdown
+    | Axentix.Fab
+    | Axentix.Modal
+    | Axentix.Sidenav
+    | Axentix.Tab
+    | Axentix.Toast
+    | Axentix.Tooltip
+    | []
+  >;
+
+  function sync(element: string): void;
+  function syncAll(): void;
+
+  function reset(element: string): void;
+  function resetAll(): void;
 }
 
-declare var Axentix: Axentix.AxentixStatic;
-
-declare module 'Axentix' {
-  export = Axentix;
+export class Axentix {
+  constructor(component: string | 'all', options?: any);
 }
